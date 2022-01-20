@@ -9,6 +9,8 @@ AAstroidProGameMode::AAstroidProGameMode()
 	DefaultPawnClass = AAstroidProPawn::StaticClass();
 }
 
+
+
 int32 AAstroidProGameMode::GetGameScore() const
 {
 	return GameScore;

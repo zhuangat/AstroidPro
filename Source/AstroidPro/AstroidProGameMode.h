@@ -14,9 +14,11 @@ class AAstroidProGameMode : public AGameModeBase
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	int32 GameScore = 0;
 
+
 public:
 	AAstroidProGameMode();
-
+	
+	
 	UFUNCTION(BlueprintCallable)
 	int32 GetGameScore() const;
 

@@ -118,19 +118,32 @@ void APlayerPawn::FireShot(FVector FireDirection)
 		// If we are pressing fire button
 		if (bIsFireInputPressed == true)
 		{
-			const FRotator FireRotation = FireDirection.Rotation();
-			// Spawn projectile at an offset from this pawn
-			const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
-
-			UWorld* const World = GetWorld();
-			if (World != nullptr)
+			const uint8 Ammo = FireUpgradeLevel * 2 + 1;
+			for (uint8 Index = 0; Index < Ammo; Index++)
 			{
-				// spawn the projectile
-				World->SpawnActor<AAstroidProProjectile>(SpawnLocation, FireRotation);
-			}
+				FRotator FanOffset;
+				if (Index % 2 == 0 )
+				{
+					FanOffset = FRotator(0.0f, Index / 2 * FireFanWidth, 0.0f);
+				}
+				else
+				{
+					FanOffset = FRotator(0.0f, - (Index + 1 / 2) * FireFanWidth, 0.0f);
+				}
+				const FRotator FireRotation = FireDirection.Rotation() + FanOffset;
+				// Spawn projectile at an offset from this pawn
+				const FVector SpawnLocation = GetActorLocation() + FireRotation.RotateVector(GunOffset);
 
+				UWorld* const World = GetWorld();
+				if (World != nullptr)
+				{
+					// spawn the projectile
+					World->SpawnActor<AAstroidProProjectile>(SpawnLocation, FireRotation);
+				}
+			}
+			
 			bCanFire = false;
-			World->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &APlayerPawn::ShotTimerExpired, FireRate);
+			GetWorld()->GetTimerManager().SetTimer(TimerHandle_ShotTimerExpired, this, &APlayerPawn::ShotTimerExpired, FireRate);
 
 			// try and play the sound if specified
 			if (FireSound != nullptr)
@@ -156,6 +169,12 @@ void APlayerPawn::OnFirePressed()
 void APlayerPawn::OnFireReleased()
 {
 	bIsFireInputPressed = false;
+}
+
+void APlayerPawn::UpgradeFire()
+{
+	FireUpgradeLevel += 1;
+	FireUpgradeLevel = FMath::Clamp(FireUpgradeLevel, static_cast<uint8>(0), MaxUpgrade);
 }
 
 void APlayerPawn::GameOver()

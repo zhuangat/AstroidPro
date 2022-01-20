@@ -7,5 +7,12 @@ void ASmallRock::OnProjectileInteract_Implementation(AAstroidProProjectile* Targ
 {
 	Super::OnProjectileInteract_Implementation(TargetProjectile, Hit);
 
+	const auto Random = FMath::FRandRange(0.0f, 1.0f);
+	
+	if (Random < DropRate)
+	{
+		GetWorld()->SpawnActor<AUpgradeBase>(RewardUpgradeClass, GetActorLocation(), FRotator());
+	}
+	
 	Destroy();
 }

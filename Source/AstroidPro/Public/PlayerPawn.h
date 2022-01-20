@@ -34,6 +34,14 @@ public:
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float FireRate;
 
+	/* Distribution of the projectiles the weapon will fire */
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	float FireFanWidth = 10.0f;
+	
+	/* Maximum projectiles the weapon will fire */
+	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
+	uint8 MaxUpgrade = 2;
+
 	/* The speed our ship moves around the level */
 	UPROPERTY(Category = Gameplay, EditAnywhere, BlueprintReadWrite)
 	float MoveSpeed;
@@ -58,6 +66,9 @@ public:
 	void OnFirePressed();
 	void OnFireReleased();
 
+	// Upgrades
+	void UpgradeFire();
+	
 	// Gameplay
 	void GameOver();
 	
@@ -72,6 +83,9 @@ private:
 	uint32 bCanFire : 1;
 	uint32 bIsFireInputPressed : 1;
 
+	// Fire Upgrade level
+	uint8 FireUpgradeLevel = 0;
+	
 	// Gameplay Flags
 	uint32 bIsAlive : 1;
 	
